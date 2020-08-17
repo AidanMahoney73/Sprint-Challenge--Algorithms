@@ -96,7 +96,40 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        # Fill this out
+        for iteration in range(round(len(self._list)/2)): # Only need half as many iterations as the lenght of the list
+            # Pass through data moving right
+            while self._light == "OFF":
+
+                # Ensure I dont have a none object throughout the pass through
+                if self._item == None:
+                    self.swap_item()
+
+                # If the Item at my position is greater than the item I am holding swap the items
+                if self.compare_item() == -1:
+                    self.swap_item()
+                
+                # Determine whether or not I am at the end of my iteration cut off
+                # Dynamic cut off point so we aren't looping through values that have already been sorted
+                if self._position < (len(self._list)-1)-iteration: 
+                    self.move_right()
+                else:
+                    self.swap_item() # if we are at the end of the iteration, that means the item in hand is the largest so we want to drop that
+                    self.set_light_on() # Switching the light indicates we are done with the right pass and can now head left through the list
+
+            # Pass through data moving left
+            while self._light == "ON":
+                # Check if item is less than the one on hand and swap them
+                if self.compare_item() == 1:
+                    self.swap_item()
+
+                # Determine whether or not I am at the end of my iteration cut off
+                # Dynamic cut off point so we aren't looping through values that have already been sorted
+                if self._position > iteration:
+                    self.move_left()
+                else:
+                    self.swap_item() # we want to drop the smallest item and pick None back up
+                    self.move_right() # Head right so we can start the next iteration in the first position with None in hand 
+                    self.set_light_off() # Switching the light indicates we are done with the left pass and the next iteration will be right
         pass
 
 
